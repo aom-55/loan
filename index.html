@@ -926,7 +926,7 @@
 
     async function confirmAuthModal() {
       const pin = String(els.authPassword.value || '').trim();
-      if (pin !== '1234') {
+      if (pin !== '7712') {
         showToast('รหัสไม่ถูกต้อง', 'error', 2200);
         els.authPassword.focus();
         return;
@@ -951,7 +951,7 @@
         await updateVerificationStatus({
           docNo: record.docNo,
           verificationStatus: nextStatus,
-          pin: '1234'
+          pin: '7712'
         });
         showToast('เปลี่ยนสถานะเรียบร้อย', 'success', 1800);
         await loadData();
@@ -1282,7 +1282,7 @@
       const verificationStatus = String(payload?.verificationStatus || '').trim();
       const pin = String(payload?.pin || '').trim();
 
-      if (pin !== '1234') throw new Error('รหัสไม่ถูกต้อง');
+      if (pin !== '7712') throw new Error('รหัสไม่ถูกต้อง');
       if (!['รอตรวจสอบ', 'ตรวจสอบแล้ว'].includes(verificationStatus)) {
         throw new Error('สถานะไม่ถูกต้อง');
       }
