@@ -3,7 +3,6 @@
 <head>
   <base target="_top">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>อ้อมเงินกู้ จัดการได้ง่ายๆ</title>
   <meta charset="UTF-8">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -1323,11 +1322,32 @@
       return all;
     }
 
+    const NUMERIC_FIELDS = new Set([
+      'amount', 'installments', 'installmentamount', 'interest'
+    ]);
+
+    function sanitizePayload(payload) {
+      const result = {};
+      for (const [key, value] of Object.entries(payload)) {
+        if (NUMERIC_FIELDS.has(key)) {
+          if (value === '' || value === null || value === undefined) {
+            result[key] = null;
+          } else {
+            const n = Number(value);
+            result[key] = isNaN(n) ? null : n;
+          }
+        } else {
+          result[key] = value;
+        }
+      }
+      return result;
+    }
+
     async function createRow(payload) {
       return apiRequest(`/rest/v1/${SUPABASE_TABLE}`, {
         method: 'POST',
         prefer: 'return=representation',
-        body: JSON.stringify(payload)
+        body: JSON.stringify(sanitizePayload(payload))
       });
     }
 
@@ -1335,7 +1355,7 @@
       return apiRequest(`/rest/v1/${SUPABASE_TABLE}?id=eq.${rowId}`, {
         method: 'PATCH',
         prefer: 'return=representation',
-        body: JSON.stringify(payload)
+        body: JSON.stringify(sanitizePayload(payload))
       });
     }
 
