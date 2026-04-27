@@ -46,7 +46,6 @@
             <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
             <span class="text-[10px] font-bold text-emerald-600">Online</span>
           </div>
-          <span id="liveClock" class="text-[9px] font-medium text-slate-400 mt-0.5"></span>
         </div>
       </header>
 
@@ -376,10 +375,10 @@
 
   
 <script>
-    const SUPABASE_URL = 'https://pfobzathluoivoufkdwj.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBmb2J6YXRobHVvaXZvdWZrZHdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1MDQ0NDIsImV4cCI6MjA5MjA4MDQ0Mn0.3dUJM3oDAqUR4R7DLUwSITnzWphguVo8M_uq8Nisegw';
-    const SUPABASE_TABLE = 'Data1';
-    const SUPABASE_BUCKET = 'Flieall';
+    const SUPABASE_URL = 'https://gjmxmuccwppptmjonuwf.supabase.co'; // URL project ใหม่ // anon key project ใหม่
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdqbXhtdWNjd3BwcHRtam9udXdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDQ3NjIsImV4cCI6MjA5MjQyMDc2Mn0.vMdMWFzcAUqc3FFsYYNXFbGMGYQKlQm9DNjpUFyLoOI';
+    const SUPABASE_TABLE = 'Data1'; // ชื่อ tabel (ถ้าตั้งชื่อเดิม ไม่ต้องแก้)
+    const SUPABASE_BUCKET = 'Flieall'; // ชื่อ bucket (ถ้าตั้งชื่อเดิม ไม่ต้องแก้)
 
     const FIELD_MAP = {
       type: 'type',
@@ -610,7 +609,6 @@
             </div>
             <h4 class="font-black text-slate-800 text-lg leading-tight">${escapeHtml(record.name || '')}</h4>
             <p class="text-xs text-slate-400 font-medium">${escapeHtml(record.phone || '')}</p>
-            <p class="text-xs text-slate-900 font-medium mt-0.5">${escapeHtml(record.timestamp || '')}</p>
           </div>
           <div class="text-right">
             <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-0.5">TOTAL DEBT</p>
@@ -928,7 +926,7 @@
 
     async function confirmAuthModal() {
       const pin = String(els.authPassword.value || '').trim();
-      if (pin !== '1234') {
+      if (pin !== '7712') {
         showToast('รหัสไม่ถูกต้อง', 'error', 2200);
         els.authPassword.focus();
         return;
@@ -953,7 +951,7 @@
         await updateVerificationStatus({
           docNo: record.docNo,
           verificationStatus: nextStatus,
-          pin: '1234'
+          pin: '7712'
         });
         showToast('เปลี่ยนสถานะเรียบร้อย', 'success', 1800);
         await loadData();
@@ -1284,7 +1282,7 @@
       const verificationStatus = String(payload?.verificationStatus || '').trim();
       const pin = String(payload?.pin || '').trim();
 
-      if (pin !== '1234') throw new Error('รหัสไม่ถูกต้อง');
+      if (pin !== '7712') throw new Error('รหัสไม่ถูกต้อง');
       if (!['รอตรวจสอบ', 'ตรวจสอบแล้ว'].includes(verificationStatus)) {
         throw new Error('สถานะไม่ถูกต้อง');
       }
@@ -1757,22 +1755,6 @@
     document.addEventListener('change', (e) => {
       if (e.target === els.payAllToggle) syncPaymentModalUI();
     });
-
-    // Live clock (พุทธศักราช)
-    function updateClock() {
-      const el = document.getElementById('liveClock');
-      if (!el) return;
-      const now = new Date();
-      const day   = String(now.getDate()).padStart(2, '0');
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const year  = now.getFullYear() + 543;
-      const hh    = String(now.getHours()).padStart(2, '0');
-      const mm    = String(now.getMinutes()).padStart(2, '0');
-      const ss    = String(now.getSeconds()).padStart(2, '0');
-      el.textContent = `${day}/${month}/${year} ${hh}:${mm}:${ss}`;
-    }
-    updateClock();
-    setInterval(updateClock, 1000);
 
     window.addEventListener('load', init);
   </script>
