@@ -621,7 +621,7 @@
         <div class="grid grid-cols-2 gap-3 text-xs text-slate-500 mb-4">
           <div class="bg-slate-50 rounded-2xl p-3">
             <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">กำหนดชำระ</p>
-            <p class="font-bold text-slate-700">${escapeHtml(record.dueDate || '-')}</p>
+            <p class="font-bold text-slate-700">${escapeHtml(toThaiDateStr(record.dueDate) || '-')}</p>
           </div>
           <div class="bg-slate-50 rounded-2xl p-3">
             <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">วิธีรับเงิน</p>
@@ -1162,7 +1162,7 @@
         [FIELD_MAP.name]: name,
         [FIELD_MAP.phone]: phone,
         [FIELD_MAP.amount]: amount,
-        [FIELD_MAP.dueDate]: dueDate,
+        [FIELD_MAP.dueDate]: toThaiDateStr(dueDate),
         [FIELD_MAP.installmentType]: isInstallment ? 'ผ่อน' : 'ไม่ผ่อน',
         [FIELD_MAP.installments]: installments,
         [FIELD_MAP.installmentAmount]: installmentAmount,
@@ -1689,6 +1689,19 @@
       });
     }
 
+
+    // แปลง YYYY-MM-DD → DD/MM/BBBB (พ.ศ.) และรองรับค่าเก่าในฐานข้อมูล
+    function toThaiDateStr(dateStr) {
+      if (!dateStr) return '';
+      const alreadyThai = String(dateStr).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+      if (alreadyThai) {
+        const y = parseInt(alreadyThai[3], 10);
+        return y > 2500 ? String(dateStr) : `${alreadyThai[1]}/${alreadyThai[2]}/${y + 543}`;
+      }
+      const m = String(dateStr).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (!m) return String(dateStr);
+      return `${m[3]}/${m[2]}/${parseInt(m[1], 10) + 543}`;
+    }
     async function apiRequest(path, options = {}) {
       const url = path.startsWith('http') ? path : `${SUPABASE_URL}${path}`;
       const headers = new Headers(options.headers || {});
