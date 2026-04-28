@@ -609,6 +609,7 @@
             </div>
             <h4 class="font-black text-slate-800 text-lg leading-tight">${escapeHtml(record.name || '')}</h4>
             <p class="text-xs text-slate-400 font-medium">${escapeHtml(record.phone || '')}</p>
+            ${record.timestamp ? `<p class="text-xs font-bold text-slate-900">${escapeHtml(record.timestamp)}</p>` : ''}
           </div>
           <div class="text-right">
             <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-0.5">TOTAL DEBT</p>
